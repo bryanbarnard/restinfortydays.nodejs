@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>API index</title>
+</head>
+<body>
+<h2>PUT /api/movies/3</h2>
+<p>Not Yet Loaded....</p>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $.ajax({
+            url: "/api/movies/3",
+            type: "PUT",
+            data: {
+                "title": "Carrie",
+                "genre": "horror",
+                "year": "2000"
+            },
+            success: function (data, textStatus, jqXHR) {
+                console.log("Put response:");
+                console.log(data);
+                console.log(textStatus);
+                console.log(jqXHR);
+                $("p").text(jqXHR.responseText);
+            }
+        });
+    })
+</script>
+</body>
+</html>
