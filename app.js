@@ -124,11 +124,23 @@ app.put('/api/movies/:id', function (req, res) {
         movie.title = req.body.title;
         movie.year = req.body.year;
         movie.genre = req.body.genre;
-        saveMovies()
+        saveMovies();
         return res.json(movie, 200);
     }
 });
 
-app.listen(process.env.PORT, function () {
+/* DELETE /api/movies/1 */
+app.delete('/api/movies/:id', function (req, res) {
+   console.log('DELETE: ' + req.params.id);
+   var movie = _.find(movieList.movies, function(movie) {return movie.id == req.params.id;});
+   if(!movie){
+       movieList = _.filter(movieList.movies, function(movie) {return movie.id != req.params.id});
+       saveMovies();
+       return res.json({"result" : "removed"}, 200);
+   }
+
+});
+
+app.listen(process.env.PORT || 3000, function () {
     console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
 });
