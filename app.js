@@ -60,6 +60,8 @@ app.get('/api', function (req, res) {
 
 /* GET /api/movies */
 app.get('/api/movies', function (req, res) {
+    console.log("GET: movies");
+    console.log(movieList);
     return res.json(movieList,200);
 });
 
@@ -72,23 +74,6 @@ app.get('/api/movies/:id', function (req, res) {
         return res.json(movie, 200);
     }
 });
-
-/* SAMPLE POST */
-//POST /api/movies HTTP/1.1
-//Host: localhost:3000
-//Connection: keep-alive
-//Content-Length: 44
-//Cache-Control: max-age=0
-//Origin: http://localhost:3000
-//    User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/536.5 (KHTML, like Gecko) Chrome/19.0.1084.46 Safari/536.5
-//Content-Type: application/x-www-form-urlencoded
-//Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
-// Referer: http://localhost:3000/testforms.html
-// Accept-Encoding: gzip,deflate,sdch
-// Accept-Language: en-US,en;q=0.8
-// Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.3
-//
-// id=3&title=Caddyshack&genre=Comedy&year=1978
 
 /* POST /api/movies */
 app.post('/api/movies', function (req, res) {
@@ -105,12 +90,6 @@ app.post('/api/movies', function (req, res) {
     movieList.movies.push(movie);
     saveMovies();
     return res.json(movie, 200);
-});
-
-//todo: implement
-app.delete('/api/movies/:id', function (req, res) {
-    console.log('delete ' + req.params.id + 'from movies');
-    return res.send('');
 });
 
 /* PUT /api/movies/1 */
@@ -130,15 +109,14 @@ app.put('/api/movies/:id', function (req, res) {
 });
 
 /* DELETE /api/movies/1 */
-app.delete('/api/movies/:id', function (req, res) {
+app.del('/api/movies/:id', function (req, res) {
    console.log('DELETE: ' + req.params.id);
    var movie = _.find(movieList.movies, function(movie) {return movie.id == req.params.id;});
-   if(!movie){
-       movieList = _.filter(movieList.movies, function(movie) {return movie.id != req.params.id});
+   if(movie){
+       movieList.movies = _.filter(movieList.movies, function(movie) {return movie.id != req.params.id});
        saveMovies();
        return res.json({"result" : "removed"}, 200);
    }
-
 });
 
 app.listen(process.env.PORT || 3000, function () {

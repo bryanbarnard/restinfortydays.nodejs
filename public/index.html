@@ -3,32 +3,152 @@
 <head>
     <meta charset="utf-8">
     <title>API index</title>
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
+    <script src="script/jsrender.js"></script>
+    <script id="movieTemplate" type="text/x-jsrender">
+        <li>
+            ID <b>{{:id}}</b> Title <b>{{:title}}</b>  Genre <b>{{:genre}} </b> Release Year <b>{{:year}} </b>
+        </li>
+    </script>
+    <script id="movieTemplate1" type="text/x-jsrender">
+        <li>
+             ID <b>{{:id}}</b> Title <b>{{:title}}</b>  Genre <b>{{:genre}} </b> Release Year <b>{{:year}} </b>
+        </li>
+    </script>
 </head>
 <body>
 <section>
     <h1>Nouns</h1>
     <p>
-        <h3>GET</h3>
-        <button>/movies</button><br>
-        <button>/movies/:id</button>
+    <h3>GET</h3>
+    <button id="getmovies" type="button">/movies</button>
+    <br><br>
+    ID : <input type="text" id="movieid"/><br/>
+    <button id="getmovie" type="button">/movies/:id</button>
+    <p>
+
+    <h3>POST</h3>
+
+    <form name="posttest" id="posttest" method="post" action="api/movies">
+        ID : <input type="text" name="id"/><br/>
+        Title: <input type="text" name="title"/><br/>
+        Genre: <input type="text" name="genre"/><br/>
+        Year: <input type="text" name="year"/><br/>
+        <input type="submit" value="/movies"/>
+    </form>
     </p>
     <p>
-        <h3>POST</h3>
-        <button>/movies</button><br>
+
+    <h3>PUT</h3>
+    ID : <input type="text" id="updateid"/><br/>
+    Title: <input type="text" id="updatetitle"/><br/>
+    Genre: <input type="text" id="updategenre"/><br/>
+    Year: <input type="text" id="updateyear"/><br/>
+    <button id="updatemovie" type="button">/movies/id</button>
+    <br>
     </p>
     <p>
-        <h3>PUT</h3>
-        <button>/movies/id</button><br>
-    </p>
-    <p>
-        <h3>Delete</h3>
-        <button>/movies/id</button><br>
+
+    <h3>Delete</h3>
+    ID : <input type="text" id="deleteid"/><br/>
+    <button id="deletemovie" type="button">/movies/id</button>
+    <br>
     </p>
 
+    <h2>Result</h2>
     <div id="result">
         Not yet loaded...
     </div>
 </section>
-<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+<script>
+    /* attach a submit handler to the form */
+    $('#posttest').submit(function (event) {
+
+        /* stop form from submitting normally */
+        event.preventDefault();
+
+        /* get some values from elements on the page: */
+        var $form = $(this),
+                vId = $form.find('input[name="id"]').val(),
+                vTitle = $form.find('input[name="title"]').val(),
+                vGenre = $form.find('input[name="genre"]').val(),
+                vYear = $form.find('input[name="year"]').val(),
+                url = $form.attr('action');
+
+        /* Send the data using post and put the results in a div */
+        $.post(url, { id:vId, title:vTitle, genre:vGenre, year:vYear  },
+                function (data) {
+                    console.log(data);
+                    $('#result').empty().html(
+                            $('#movieTemplate').render(data)
+                    );
+                }
+        );
+    });
+
+    $('#getmovies').click(function (event) {
+        $.get('/api/movies',
+                function(data) {
+                    console.log(data);
+                    $('#result').empty().html(
+                        $('#movieTemplate1').render(data.movies)
+                    );
+                }
+        );
+    });
+
+    $('#getmovie').click(function (event) {
+        var vId = $('#movieid').val();
+        $.get('/api/movies/' + vId,
+                function(data) {
+                    console.log(data);
+                    $('#result').empty().html(
+                            $('#movieTemplate').render(data)
+                    );
+                }
+        );
+    });
+
+    $('#updatemovie').click(function (event) {
+        var vId = $('#updateid').val(),
+            vTitle = $('#updatetitle').val(),
+            vGenre = $('#updategenre').val(),
+            vYear = $('#updateyear').val();
+
+        $.ajax({
+            url: '/api/movies/' + vId,
+            type: "PUT",
+            data: {
+                'title': vTitle,
+                'genre': vGenre,
+                'year': vYear
+            },
+            success: function (data, textStatus, jqXHR) {
+                console.log(data);
+                $('#result').empty().html(
+                        $('#movieTemplate').render(data)
+                );
+            }
+        });
+    });
+
+    $('#deletemovie').click(function (event) {
+        var vId = $('#deleteid').val();
+
+        $.ajax({
+            url: '/api/movies/' + vId,
+            type: "DELETE",
+            data: {
+            },
+            success: function (data, textStatus, jqXHR) {
+                console.log('delete success');
+                $('#result').empty().html(
+                        '<b>Movie Record ' + vId +' Deleted</b>'
+                );
+            }
+        });
+    });
+
+</script>
 </body>
 </html>
