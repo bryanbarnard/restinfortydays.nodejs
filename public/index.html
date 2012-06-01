@@ -34,6 +34,7 @@
         Title: <input type="text" name="title"/><br/>
         Genre: <input type="text" name="genre"/><br/>
         Year: <input type="text" name="year"/><br/>
+        Rating: <input type="text" name="rating"/><br/>
         <input type="submit" value="/movies"/>
     </form>
     </p>
@@ -44,6 +45,7 @@
     Title: <input type="text" id="updatetitle"/><br/>
     Genre: <input type="text" id="updategenre"/><br/>
     Year: <input type="text" id="updateyear"/><br/>
+    Rating: <input type="text" id="updaterating"/><br/>
     <button id="updatemovie" type="button">/movies/id</button>
     <br>
     </p>
@@ -73,10 +75,11 @@
                 vTitle = $form.find('input[name="title"]').val(),
                 vGenre = $form.find('input[name="genre"]').val(),
                 vYear = $form.find('input[name="year"]').val(),
+                vRating = $form.find('input[name="rating"]').val(),
                 url = $form.attr('action');
 
         /* Send the data using post and put the results in a div */
-        $.post(url, { id:vId, title:vTitle, genre:vGenre, year:vYear  },
+        $.post(url, { id:vId, title:vTitle, genre:vGenre, year:vYear, rating:vRating },
                 function (data) {
                     console.log(data);
                     $('#result').empty().html(
@@ -113,7 +116,9 @@
         var vId = $('#updateid').val(),
             vTitle = $('#updatetitle').val(),
             vGenre = $('#updategenre').val(),
-            vYear = $('#updateyear').val();
+            vYear = $('#updateyear').val(),
+            vRating = $('#updaterating').val();
+           )
 
         $.ajax({
             url: '/api/movies/' + vId,
@@ -121,7 +126,8 @@
             data: {
                 'title': vTitle,
                 'genre': vGenre,
-                'year': vYear
+                'year': vYear,
+                'rating': vRating
             },
             success: function (data, textStatus, jqXHR) {
                 console.log(data);
