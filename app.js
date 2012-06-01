@@ -83,7 +83,8 @@ app.post('/api/movies', function (req, res) {
     id: req.body.id,
     title:  req.body.title,
     year:   req.body.year,
-    genre:  req.body.genre
+    genre:  req.body.genre,
+    rating: req.body.rating
     };
 
     // add to list of movies
@@ -103,6 +104,7 @@ app.put('/api/movies/:id', function (req, res) {
         movie.title = req.body.title;
         movie.year = req.body.year;
         movie.genre = req.body.genre;
+        movie.rating = req.body.rating;
         saveMovies();
         return res.json(movie, 200);
     }
