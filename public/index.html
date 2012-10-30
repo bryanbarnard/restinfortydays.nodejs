@@ -7,19 +7,21 @@
     <script src="script/jsrender.js"></script>
     <script id="movieTemplate" type="text/x-jsrender">
         <li>
-            ID <b>{{:id}}</b> Title <b>{{:title}}</b>  Genre <b>{{:genre}} </b> Release Year <b>{{:year}} </b>
+            ID <b>{{:id}}</b> Title <b>{{:title}}</b> Genre <b>{{:genre}} </b> Release Year <b>{{:year}} </b>
         </li>
     </script>
     <script id="movieTemplate1" type="text/x-jsrender">
         <li>
-             ID <b>{{:id}}</b> Title <b>{{:title}}</b>  Genre <b>{{:genre}} </b> Release Year <b>{{:year}} </b>
+            ID <b>{{:id}}</b> Title <b>{{:title}}</b> Genre <b>{{:genre}} </b> Release Year <b>{{:year}} </b>
         </li>
     </script>
 </head>
 <body>
 <section>
     <h1>Nouns</h1>
+
     <p>
+
     <h3>GET</h3>
     <button id="getmovies" type="button">/movies</button>
     <br><br>
@@ -58,6 +60,7 @@
     </p>
 
     <h2>Result</h2>
+
     <div id="result">
         Not yet loaded...
     </div>
@@ -90,20 +93,21 @@
     });
 
     $('#getmovies').click(function (event) {
-        $.get('/api/movies',
-                function(data) {
-                    console.log(data);
-                    $('#result').empty().html(
-                        $('#movieTemplate1').render(data.movies)
-                    );
-                }
-        );
-    });
+                $.get('/api/movies',
+                        function (data) {
+                            console.log(data);
+                            $('#result').empty().html(
+                                    $('#movieTemplate1').render(data.movies)
+                            );
+                        }
+                );
+            }
+    );
 
     $('#getmovie').click(function (event) {
         var vId = $('#movieid').val();
         $.get('/api/movies/' + vId,
-                function(data) {
+                function (data) {
                     console.log(data);
                     $('#result').empty().html(
                             $('#movieTemplate').render(data)
@@ -116,20 +120,20 @@
         var vId = $('#updateid').val(),
             vTitle = $('#updatetitle').val(),
             vGenre = $('#updategenre').val(),
-            vYear = $('#updateyear').val(),
+            vYear  = $('#updateyear').val(),
             vRating = $('#updaterating').val();
-           )
 
-        $.ajax({
-            url: '/api/movies/' + vId,
-            type: "PUT",
-            data: {
-                'title': vTitle,
-                'genre': vGenre,
-                'year': vYear,
-                'rating': vRating
+
+        $ajax({
+            url:'/api/movies/' + vId,
+            type:"PUT",
+            data:{
+                'title':vTitle,
+                'genre':vGenre,
+                'year':vYear,
+                'rating':vRating
             },
-            success: function (data, textStatus, jqXHR) {
+            success:function (data, textStatus, jqXHR) {
                 console.log(data);
                 $('#result').empty().html(
                         $('#movieTemplate').render(data)
@@ -142,14 +146,14 @@
         var vId = $('#deleteid').val();
 
         $.ajax({
-            url: '/api/movies/' + vId,
-            type: "DELETE",
-            data: {
+            url:'/api/movies/' + vId,
+            type:"DELETE",
+            data:{
             },
-            success: function (data, textStatus, jqXHR) {
+            success:function (data, textStatus, jqXHR) {
                 console.log('delete success');
                 $('#result').empty().html(
-                        '<b>Movie Record ' + vId +' Deleted</b>'
+                        '<b>Movie Record ' + vId + ' Deleted</b>'
                 );
             }
         });
